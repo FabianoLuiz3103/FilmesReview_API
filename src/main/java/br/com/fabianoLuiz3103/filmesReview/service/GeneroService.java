@@ -4,6 +4,7 @@ import br.com.fabianoLuiz3103.filmesReview.dto.genero.CreateAndUpdateGeneroDTO;
 import br.com.fabianoLuiz3103.filmesReview.dto.genero.ReadGeneroDTO;
 import br.com.fabianoLuiz3103.filmesReview.model.Genero;
 import br.com.fabianoLuiz3103.filmesReview.repository.GeneroRepository;
+import br.com.fabianoLuiz3103.filmesReview.service.exception.ResourceNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ public class GeneroService {
     @Transactional(readOnly = true)
     public ReadGeneroDTO findById(Long id){
         var genero = generoRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("Recurso não encontrado com id: " + id)
+                () -> new ResourceNotFoundException("Recurso não encontrado com id: " + id)
         );
         return new ReadGeneroDTO(genero);
     }
@@ -56,16 +57,12 @@ public class GeneroService {
     @Transactional
     public void delete(Long id){
         if(!generoRepository.existsById(id)){
-            throw new EntityNotFoundException("Recurso não encontrado com id: " + id);
+            throw new ResourceNotFoundException("Recurso não encontrado com id: " + id);
         }
         try{
             generoRepository.deleteById(id);
-        }catch (Exception e) {
-            if (e.getCause() instanceof org.hibernate.exception.ConstraintViolationException) {
-                throw new ConstraintViolationException("Não foi possível excluir o registro pois ele está associado a outros dados.", null);
-            } else {
-                throw new RuntimeException("Erro ao excluir o registro.", e);
-            }
+        }catch (EntityNotFoundException e){
+            throw new ResourceNotFoundException("Recurso não encontrado");
         }
     }
 }
