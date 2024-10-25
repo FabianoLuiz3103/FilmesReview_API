@@ -6,14 +6,16 @@ public record ReadFilmeDTO(
 
         Long id,
         String titulo,
-        Integer ano
+        Integer ano,
+        String genero
 ) {
 
     public ReadFilmeDTO(Filme filme){
         this(
                 filme.getId(),
                 filme.getTitulo(),
-                filme.getAno()
+                filme.getAno(),
+                filme.getGenero().getNome()
         );
     }
 }

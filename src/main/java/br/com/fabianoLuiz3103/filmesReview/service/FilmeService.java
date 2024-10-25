@@ -4,6 +4,7 @@ import br.com.fabianoLuiz3103.filmesReview.dto.filme.CreateAndUpdateFilmeDTO;
 import br.com.fabianoLuiz3103.filmesReview.dto.filme.ReadFilmeDTO;
 import br.com.fabianoLuiz3103.filmesReview.model.Filme;
 import br.com.fabianoLuiz3103.filmesReview.repository.FilmeRepository;
+import br.com.fabianoLuiz3103.filmesReview.repository.GeneroRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +20,16 @@ public class FilmeService {
     @Autowired
     private FilmeRepository filmeRepository;
 
+    @Autowired
+    private GeneroRepository generoRepository;
+
     //Insert
     @Transactional
     public ReadFilmeDTO insert(CreateAndUpdateFilmeDTO filmeDTO){
-        var filme = new Filme(filmeDTO);
+        var genero = generoRepository.findById(filmeDTO.idGenero()).orElseThrow(
+                () -> new EntityNotFoundException("Gênero não encontrado com id: " + filmeDTO.idGenero())
+        );
+        var filme = new Filme(filmeDTO, genero);
         filme = filmeRepository.save(filme);
         return new ReadFilmeDTO(filme);
     }

@@ -3,7 +3,9 @@ package br.com.fabianoLuiz3103.filmesReview.service;
 import br.com.fabianoLuiz3103.filmesReview.dto.review.CreateAndUpdateReviewDTO;
 import br.com.fabianoLuiz3103.filmesReview.dto.review.ReadReviewDTO;
 import br.com.fabianoLuiz3103.filmesReview.model.Review;
+import br.com.fabianoLuiz3103.filmesReview.repository.FilmeRepository;
 import br.com.fabianoLuiz3103.filmesReview.repository.ReviewRepository;
+import br.com.fabianoLuiz3103.filmesReview.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,13 +20,27 @@ public class ReviewService {
     @Autowired
     private ReviewRepository reviewRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private FilmeRepository filmeRepository;
+
     //Insert
     @Transactional
     public ReadReviewDTO insert(CreateAndUpdateReviewDTO reviewDTO){
-        var review = new Review(reviewDTO);
+        var user = userRepository.findById(reviewDTO.idUser()).orElseThrow(
+                () -> new EntityNotFoundException("User não encontrado com id: " + reviewDTO.idUser())
+        );
+        var filme = filmeRepository.findById(reviewDTO.idFilme()).orElseThrow(
+                () -> new EntityNotFoundException("Filme não encontrado com id: " + reviewDTO.idFilme())
+        );
+        var review = new Review(reviewDTO, user, filme);
         review = reviewRepository.save(review);
         return new ReadReviewDTO(review);
     }
+
+
 
     //Read - all
     @Transactional(readOnly = true)

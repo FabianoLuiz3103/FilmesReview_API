@@ -3,7 +3,6 @@ package br.com.fabianoLuiz3103.filmesReview.model;
 import br.com.fabianoLuiz3103.filmesReview.dto.filme.CreateAndUpdateFilmeDTO;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.OnDelete;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,12 +32,15 @@ public class Filme {
     @JoinColumn(name = "id_genero", nullable = false)
     private Genero genero;
 
-    public Filme(CreateAndUpdateFilmeDTO filmeDTO){
+    public Filme(CreateAndUpdateFilmeDTO filmeDTO, Genero genero){
         if(filmeDTO.titulo() != null){
             this.titulo = filmeDTO.titulo();
         }
         if(filmeDTO.ano() != null){
             this.ano = filmeDTO.ano();
+        }
+        if (genero != null){
+            this.genero = genero;
         }
     }
 

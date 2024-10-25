@@ -28,9 +28,16 @@ public class Review {
     @JoinColumn(name = "id_filme", nullable = false)
     private Filme filme;
 
-    public Review(CreateAndUpdateReviewDTO reviewDTO){
+    public Review(CreateAndUpdateReviewDTO reviewDTO,
+                  User user, Filme filme){
         if(reviewDTO.texto() != null){
             this.texto = reviewDTO.texto();
+        }
+        if(user != null){
+            this.user = user;
+        }
+        if(filme != null){
+            this.filme = filme;
         }
     }
 

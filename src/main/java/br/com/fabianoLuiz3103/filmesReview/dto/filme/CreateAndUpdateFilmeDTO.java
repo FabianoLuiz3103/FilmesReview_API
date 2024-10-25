@@ -10,6 +10,7 @@ public record CreateAndUpdateFilmeDTO(
         @Min(value = 1900, message = "Ano deve ser pelo menos 1900")
         @Max(value = 2100, message = "Ano deve ser no máximo 2100")
         @Positive(message = "Ano deve ser um número positivo")
-        Integer ano
+        Integer ano,
+        Long idGenero
 ) {
 }
