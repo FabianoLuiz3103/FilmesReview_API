@@ -1,7 +1,6 @@
 package br.com.fabianoLuiz3103.filmesReview.model;
 
 import br.com.fabianoLuiz3103.filmesReview.dto.review.CreateAndUpdateReviewDTO;
-import jakarta.annotation.sql.DataSourceDefinition;
 import jakarta.persistence.*;
 import lombok.*;
 
