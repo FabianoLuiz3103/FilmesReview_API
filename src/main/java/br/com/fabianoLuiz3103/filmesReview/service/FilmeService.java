@@ -8,6 +8,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,6 +20,7 @@ public class FilmeService {
     private FilmeRepository filmeRepository;
 
     //Insert
+    @Transactional
     public ReadFilmeDTO insert(CreateAndUpdateFilmeDTO filmeDTO){
         var filme = new Filme(filmeDTO);
         filme = filmeRepository.save(filme);
@@ -26,12 +28,14 @@ public class FilmeService {
     }
 
     //Read - all
+    @Transactional(readOnly = true)
     public List<ReadFilmeDTO> findAll(){
         var filmes = filmeRepository.findAll();
         return filmes.stream().map(ReadFilmeDTO::new).collect(Collectors.toList());
     }
 
     //Read - by id
+    @Transactional(readOnly = true)
     public ReadFilmeDTO findById(Long id){
         var filme = filmeRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Recurso não encontrado com id: " + id)
@@ -40,6 +44,7 @@ public class FilmeService {
     }
 
     //Update
+    @Transactional
     public ReadFilmeDTO update(CreateAndUpdateFilmeDTO filmeDTO, Long id){
         var filme = filmeRepository.getReferenceById(id);
         filme.atualizar(filmeDTO);
@@ -48,6 +53,7 @@ public class FilmeService {
     }
 
     //Delete
+    @Transactional
     public void delete(Long id){
         if(!filmeRepository.existsById(id)){
             throw new EntityNotFoundException("Recurso não encontrado com id: " + id);

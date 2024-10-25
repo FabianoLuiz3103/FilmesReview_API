@@ -7,6 +7,7 @@ import br.com.fabianoLuiz3103.filmesReview.repository.ReviewRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,6 +19,7 @@ public class ReviewService {
     private ReviewRepository reviewRepository;
 
     //Insert
+    @Transactional
     public ReadReviewDTO insert(CreateAndUpdateReviewDTO reviewDTO){
         var review = new Review(reviewDTO);
         review = reviewRepository.save(review);
@@ -25,12 +27,14 @@ public class ReviewService {
     }
 
     //Read - all
+    @Transactional(readOnly = true)
     public List<ReadReviewDTO> findAll(){
         var reviews = reviewRepository.findAll();
         return reviews.stream().map(ReadReviewDTO::new).collect(Collectors.toList());
     }
 
     //Read - by id
+    @Transactional(readOnly = true)
     public ReadReviewDTO findById(Long id){
         var review = reviewRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Recurso não encontrado com id: " + id)
@@ -39,6 +43,7 @@ public class ReviewService {
     }
 
     //Update
+    @Transactional
     public ReadReviewDTO update(CreateAndUpdateReviewDTO reviewDTO, Long id){
         var review = reviewRepository.getReferenceById(id);
         review.atualizar(reviewDTO);
@@ -47,6 +52,7 @@ public class ReviewService {
     }
 
     //Delete
+    @Transactional
     public void delete(Long id){
         if(!reviewRepository.existsById(id)){
             throw new EntityNotFoundException("Recurso não encontrado com id: " + id);

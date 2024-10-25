@@ -8,6 +8,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,6 +20,7 @@ public class UserService {
     private UserRepository userRepository;
 
     //Insert
+    @Transactional
     public ReadUserDTO insert(CreateAndUpdateUserDTO userDTO){
         var user = new User(userDTO);
         user = userRepository.save(user);
@@ -26,12 +28,14 @@ public class UserService {
     }
 
     //Read - all
+    @Transactional(readOnly = true)
     public List<ReadUserDTO> findAll(){
         var users = userRepository.findAll();
         return users.stream().map(ReadUserDTO::new).collect(Collectors.toList());
     }
 
     //Read - by id
+    @Transactional(readOnly = true)
     public ReadUserDTO findById(Long id){
         var user = userRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Recurso não encontrado com id: " + id)
@@ -40,6 +44,7 @@ public class UserService {
     }
 
     //Update
+    @Transactional
     public ReadUserDTO update(CreateAndUpdateUserDTO userDTO ,Long id){
         var user = userRepository.getReferenceById(id);
         user.atualizar(userDTO);
@@ -48,6 +53,7 @@ public class UserService {
     }
 
     //Delete
+    @Transactional
     public void delete(Long id){
         if(!userRepository.existsById(id)){
             throw new EntityNotFoundException("Recurso não encontrado com id: " + id);
