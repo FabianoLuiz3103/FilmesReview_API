@@ -1,5 +1,6 @@
 package br.com.fabianoLuiz3103.filmesReview.model;
 
+import br.com.fabianoLuiz3103.filmesReview.dto.genero.CreateAndUpdateGeneroDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,4 +25,16 @@ public class Genero {
 
     @OneToMany(mappedBy = "genero")
     private List<Filme> filmes = new ArrayList<>();
+
+    public Genero(CreateAndUpdateGeneroDTO generoDTO){
+        if(generoDTO.nome() != null){
+            this.nome = generoDTO.nome();
+        }
+    }
+
+    public void atualizar(CreateAndUpdateGeneroDTO generoDTO){
+        if(generoDTO.nome() != null){
+            this.nome = generoDTO.nome();
+        }
+    }
 }

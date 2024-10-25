@@ -1,6 +1,7 @@
 package br.com.fabianoLuiz3103.filmesReview.model;
 
 
+import br.com.fabianoLuiz3103.filmesReview.dto.user.CreateAndUpdateUserDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -29,4 +30,29 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Review> reviews = new ArrayList<>();
+
+
+    public User(CreateAndUpdateUserDTO userDTO){
+        if(userDTO.name() != null){
+            this.name = userDTO.name();
+        }
+        if(userDTO.email() != null){
+            this.email = userDTO.email();
+        }
+        if(userDTO.password() != null){
+            this.password = userDTO.password();
+        }
+    }
+
+    public void atualizar(CreateAndUpdateUserDTO userDTO){
+        if(userDTO.name() != null){
+            this.name = userDTO.name();
+        }
+        if(userDTO.email() != null){
+            this.email = userDTO.email();
+        }
+        if(userDTO.password() != null){
+            this.password = userDTO.password();
+        }
+    }
 }

@@ -1,5 +1,6 @@
 package br.com.fabianoLuiz3103.filmesReview.model;
 
+import br.com.fabianoLuiz3103.filmesReview.dto.review.CreateAndUpdateReviewDTO;
 import jakarta.annotation.sql.DataSourceDefinition;
 import jakarta.persistence.*;
 import lombok.*;
@@ -27,4 +28,16 @@ public class Review {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_filme", nullable = false)
     private Filme filme;
+
+    public Review(CreateAndUpdateReviewDTO reviewDTO){
+        if(reviewDTO.texto() != null){
+            this.texto = reviewDTO.texto();
+        }
+    }
+
+    public void atualizar(CreateAndUpdateReviewDTO reviewDTO){
+        if(reviewDTO.texto() != null){
+            this.texto = reviewDTO.texto();
+        }
+    }
 }
